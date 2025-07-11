@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Programming Study Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>📚 Java Programming Study Tracker</h1>
+            <p>Introduction to Java Programming and Data Structures, 12th Edition</p>
+        </header>
+
+        <nav class="controls">
+            <button class="control-btn" id="expandAll">📖 Expand All</button>
+            <button class="control-btn" id="collapseAll">📚 Collapse All</button>
+        </nav>
+
+        <section class="overall-progress">
+            <div class="progress-summary">
+                <div class="summary-card">
+                    <h3>Chapters Completed</h3>
+                    <div class="number" id="chaptersCompleted">0</div>
+                    <div>of 30</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Total Pages Read</h3>
+                    <div class="number" id="totalPagesRead">0</div>
+                    <div>of 1155</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Problems Solved</h3>
+                    <div class="number" id="totalProblems">0</div>
+                    <div>of 703</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Overall Progress</h3>
+                    <div class="number" id="overallPercent">0%</div>
+                </div>
+            </div>
+            <div class="overall-progress-bar">
+                <div class="overall-progress-fill" id="overallProgressFill"></div>
+            </div>
+            <div class="time-estimate">
+                <h4>⏱️ Study Time Estimates</h4>
+                <div class="time-info">
+                    <div>📖 <strong>Reading:</strong> <span id="readingTime">0 hours</span></div>
+                    <div>🧩 <strong>Problems:</strong> <span id="problemTime">0 hours</span></div>
+                    <div>⏰ <strong>Total Est:</strong> <span id="totalTime">0 hours</span></div>
+                    <div>🎯 <strong>Completion:</strong> <span id="completionDate">-</span></div>
+                </div>
+            </div>
+        </section>
+
+        <main class="chapters">
+            <div class="search-filter">
+                <input type="text" class="search-input" placeholder="🔍 Search chapters..." id="searchInput">
+            </div>
+            <div id="chaptersContainer" class="chapters-grid">
+                <!-- Chapters will be populated by JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
