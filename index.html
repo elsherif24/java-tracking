@@ -4,7 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Programming Study Tracker</title>
+    <title>Java Programming Study Tracker - Track Your Learning Progress</title>
+    <meta name="description"
+        content="Track your progress through Introduction to Java Programming and Data Structures, 12th Edition. Monitor chapter completion, problems solved, and study time estimates.">
+    <meta name="keywords" content="Java programming, study tracker, learning progress, programming book, Java tutorial">
+    <meta name="author" content="Java Study Tracker">
+
+    <!-- Open Graph meta tags for social sharing -->
+    <meta property="og:title" content="Java Programming Study Tracker">
+    <meta property="og:description" content="Track your progress through Java Programming and Data Structures textbook">
+    <meta property="og:type" content="website">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -16,8 +30,8 @@
         </header>
 
         <nav class="controls">
-            <button class="control-btn" id="expandAll">📖 Expand All</button>
-            <button class="control-btn" id="collapseAll">📚 Collapse All</button>
+            <button class="control-btn achievement" id="exportStats">📊 Export Progress</button>
+            <button class="control-btn secondary" id="importData">📥 Import Progress</button>
         </nav>
 
         <section class="overall-progress">
@@ -47,6 +61,10 @@
             </div>
             <div class="time-estimate">
                 <h4>⏱️ Study Time Estimates</h4>
+                <div class="study-hours-input">
+                    <label for="dailyHours">Daily Study Hours:</label>
+                    <input type="number" id="dailyHours" min="0.5" max="12" step="0.5" value="4">
+                </div>
                 <div class="time-info">
                     <div>📖 <strong>Reading:</strong> <span id="readingTime">0 hours</span></div>
                     <div>🧩 <strong>Problems:</strong> <span id="problemTime">0 hours</span></div>
@@ -57,13 +75,41 @@
         </section>
 
         <main class="chapters">
-            <div class="search-filter">
-                <input type="text" class="search-input" placeholder="🔍 Search chapters..." id="searchInput">
-            </div>
             <div id="chaptersContainer" class="chapters-grid">
                 <!-- Chapters will be populated by JavaScript -->
             </div>
         </main>
+    </div>
+
+    <!-- Celebration Modal -->
+    <div id="celebrationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎉 Congratulations!</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p id="celebrationMessage">You've completed a chapter!</p>
+                <div class="confetti">🎊</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚠️ Confirm Action</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p id="confirmationMessage">Are you sure?</p>
+                <div class="modal-actions">
+                    <button class="control-btn danger" id="confirmYes">Yes</button>
+                    <button class="control-btn secondary" id="confirmNo">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="data.js"></script>
