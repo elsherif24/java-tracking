@@ -33,6 +33,19 @@ class StudyTracker {
         }
     }
 
+    // Helper methods to get dynamic values from input fields
+    getReadingSpeed() {
+        return parseFloat(document.getElementById('readingSpeed').value) || AVERAGE_READING_SPEED;
+    }
+
+    getProblemTime() {
+        return parseFloat(document.getElementById('problemTime').value) || AVERAGE_PROBLEM_TIME;
+    }
+
+    getMcqQuizTime() {
+        return MCQ_QUIZ_TIME; // This remains constant as there's no input field for it
+    }
+
     bindEvents() {
         // Control buttons
         document.getElementById('exportStats').addEventListener('click', () => this.exportProgress());
@@ -40,6 +53,16 @@ class StudyTracker {
 
         // Daily hours input
         document.getElementById('dailyHours').addEventListener('change', () => this.updateOverallProgress());
+
+        // Reading speed and problem time inputs
+        document.getElementById('readingSpeed').addEventListener('change', () => {
+            this.updateAllChapterDisplays();
+            this.updateOverallProgress();
+        });
+        document.getElementById('problemTime').addEventListener('change', () => {
+            this.updateAllChapterDisplays();
+            this.updateOverallProgress();
+        });
 
         // Modal event listeners
         this.bindModalEvents();
@@ -237,9 +260,9 @@ class StudyTracker {
                 <div class="time-estimate">
                     <h4>⏱️ Time Estimates</h4>
                     <div class="time-info">
-                        <div>📖 Reading: ${Math.ceil((chapter.pages - progress.pagesRead) * AVERAGE_READING_SPEED)} minutes remaining</div>
-                        <div>🧩 Problems: ${Math.ceil((chapter.problems - progress.problemsSolved) * AVERAGE_PROBLEM_TIME)} minutes remaining</div>
-                        <div>📝 Checkpoint: ${progress.checkpointDone ? '0' : MCQ_QUIZ_TIME} minutes remaining</div>
+                        <div>📖 Reading: ${Math.ceil((chapter.pages - progress.pagesRead) * this.getReadingSpeed())} minutes remaining</div>
+                        <div>🧩 Problems: ${Math.ceil((chapter.problems - progress.problemsSolved) * this.getProblemTime())} minutes remaining</div>
+                        <div>📝 Checkpoint: ${progress.checkpointDone ? '0' : this.getMcqQuizTime()} minutes remaining</div>
                         <div>📚 Total: ${this.calculateRemainingTime(chapter, progress)} minutes remaining</div>
                     </div>
                 </div>
@@ -289,9 +312,9 @@ class StudyTracker {
     }
 
     calculateRemainingTime(chapter, progress) {
-        const readingTime = (chapter.pages - progress.pagesRead) * AVERAGE_READING_SPEED;
-        const problemTime = (chapter.problems - progress.problemsSolved) * AVERAGE_PROBLEM_TIME;
-        const checkpointTime = progress.checkpointDone ? 0 : MCQ_QUIZ_TIME;
+        const readingTime = (chapter.pages - progress.pagesRead) * this.getReadingSpeed();
+        const problemTime = (chapter.problems - progress.problemsSolved) * this.getProblemTime();
+        const checkpointTime = progress.checkpointDone ? 0 : this.getMcqQuizTime();
 
         return readingTime + problemTime + checkpointTime;
     }
@@ -404,9 +427,9 @@ class StudyTracker {
         // Update time estimates
         const timeInfo = chapterElement.querySelector('.time-info');
         timeInfo.innerHTML = `
-            <div>📖 Reading: ${Math.ceil((chapter.pages - progress.pagesRead) * AVERAGE_READING_SPEED)} minutes remaining</div>
-            <div>🧩 Problems: ${Math.ceil((chapter.problems - progress.problemsSolved) * AVERAGE_PROBLEM_TIME)} minutes remaining</div>
-            <div>📝 MCQ Quiz: ${progress.mcqDone ? '0' : MCQ_QUIZ_TIME} minutes remaining</div>
+            <div>📖 Reading: ${Math.ceil((chapter.pages - progress.pagesRead) * this.getReadingSpeed())} minutes remaining</div>
+            <div>🧩 Problems: ${Math.ceil((chapter.problems - progress.problemsSolved) * this.getProblemTime())} minutes remaining</div>
+            <div>📝 MCQ Quiz: ${progress.mcqDone ? '0' : this.getMcqQuizTime()} minutes remaining</div>
             <div>📚 Total: ${this.calculateRemainingTime(chapter, progress)} minutes remaining</div>
         `;
 
@@ -416,6 +439,16 @@ class StudyTracker {
         } else {
             chapterElement.classList.remove('completed');
         }
+    }
+
+    updateAllChapterDisplays() {
+        // Update all existing chapter displays with new time estimates
+        CHAPTERS_DATA.forEach((chapter, index) => {
+            const chapterElement = document.getElementById(`chapter${index}`);
+            if (chapterElement) {
+                this.updateChapterDisplay(index);
+            }
+        });
     }
 
     updateOverallProgress() {
@@ -469,13 +502,13 @@ class StudyTracker {
             if (!progress.checkpointDone) remainingCheckpoints++;
         });
 
-        const readingTime = Math.ceil(remainingPages * AVERAGE_READING_SPEED / 60); // Convert to hours
-        const problemTime = Math.ceil(remainingProblems * AVERAGE_PROBLEM_TIME / 60); // Convert to hours
-        const checkpointTime = Math.ceil(remainingCheckpoints * MCQ_QUIZ_TIME / 60); // Convert to hours
+        const readingTime = Math.ceil(remainingPages * this.getReadingSpeed() / 60); // Convert to hours
+        const problemTime = Math.ceil(remainingProblems * this.getProblemTime() / 60); // Convert to hours
+        const checkpointTime = Math.ceil(remainingCheckpoints * this.getMcqQuizTime() / 60); // Convert to hours
         const totalTime = readingTime + problemTime + checkpointTime;
 
         document.getElementById('readingTime').textContent = `${readingTime} hours`;
-        document.getElementById('problemTime').textContent = `${problemTime} hours`;
+        document.getElementById('problemTimeDisplay').textContent = `${problemTime} hours`;
         document.getElementById('totalTime').textContent = `${totalTime} hours`;
 
         // Calculate completion date based on user input
